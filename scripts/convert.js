@@ -67,25 +67,57 @@ function readOldDict() {
         let definitions = base['rus'];
         base = null;
 
-        words.forEach((wordEncoded, index) => {
+        let processWord = function(wordEncoded, definition) {
             let word = Entities.decode(wordEncoded);
-            if (word.length > 0) {
-                let firstLetter = slugify(word.substr(0, 1).toLocaleLowerCase()) || 'zzz_rest';
-                if (word.indexOf(' ') !== -1) {
+            if (word.length === 0) {
+                return;
+
+            }
+
+            let words = word.split(',');
+            // Case 1: We have few words splitted by commas.
+            if (words.length > 1) {
+                words.forEach((_word) => {
+                    processWord(_word.trim(), definition);
+                });
+
+                return;
+            }
+
+            let firstLetter = slugify(word.substr(0, 1).toLocaleLowerCase()) || 'zzz_rest';
+            if (word.indexOf(' ') !== -1) {
+                // Case 2. We have the same word with different definitions noted as "word I" or "word II"
+                let re = / +I+[\. ]*$/gmi;
+                let re2 = / +1+[\. ]*$/gmi;
+                if (re.test(word)) {
+                    word = word.replace(re, '');
+                }
+                // Case 3. We have a word with suffix "1."
+                else if (re2.test(word)) {
+                    word = word.replace(re, '');
+                    definition = '1. ' + definition;
+                }
+                else {
                     firstLetter = '___broken';
                 }
+            }
 
-                if (dict[firstLetter] == null) {
-                    let wordClean = word.toLocaleLowerCase().replace(/[\s]+/i, '');
-                    if (wordClean.substr(0, 1) == wordClean.substr(1, 1)) {
-                        word = wordClean.trim().substr(1);
-                    }
-
-                    dict[firstLetter] = dict[firstLetter] || {};
+            if (dict[firstLetter] == null) {
+                let wordClean = word.toLocaleLowerCase().replace(/[\s]+/i, '');
+                if (wordClean.substr(0, 1) === wordClean.substr(1, 1)) {
+                    word = wordClean.trim().substr(1);
                 }
 
-                dict[firstLetter][word] = Entities.decode(definitions[index]);
+                dict[firstLetter] = dict[firstLetter] || {};
             }
+
+            dict[firstLetter][word] = dict[firstLetter][word] || [];
+            dict[firstLetter][word].push(definition);
+        };
+
+        words.forEach((wordEncoded, index) => {
+            let definition = Entities.decode(definitions[index]);
+            processWord(wordEncoded, definition);
         });
 
         words = definitions = null;
