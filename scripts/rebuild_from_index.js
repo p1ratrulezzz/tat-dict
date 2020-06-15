@@ -2,6 +2,7 @@
 
 const fs = require('fs');
 const sortObject = require('sort-object-keys');
+const slugify = require('transliteration').slugify;
 const lunr = require('lunr');
 require('lunr-languages/lunr.stemmer.support.js')(lunr);
 require('lunr-languages/lunr.ru.js')(lunr); // or any other language you want
@@ -38,11 +39,12 @@ function rebuildIndexCb(err, files) {
         }
 
         let word = p;
-        let definitions = jsonContent[word];
+        let definitions = jsonContent[word].join("\n");
+        let firstLetter = slugify(word.substr(0, 1).toLocaleLowerCase()) || 'zzz_rest';
         jsonKeyed[word] = {
-            'id': ref,
+            'id': firstLetter + ':' + ref,
             'word': word,
-            'definitions': definitions,
+            'definition': definitions,
         };
 
         ref++;
@@ -55,9 +57,11 @@ function dataRead(documents) {
     let lunrIndex = lunr(function () {
         let self = this;
         this.use(lunr.ru);
+
         this.ref('id');
         this.field('word');
-        this.field('definitions');
+        this.field('definition');
+        this.metadataWhitelist = ['position'];
 
         for (let p in documents) {
             if (!documents.hasOwnProperty(p)) {
