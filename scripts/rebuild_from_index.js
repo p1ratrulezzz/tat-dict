@@ -2,6 +2,9 @@
 
 const fs = require('fs');
 const sortObject = require('sort-object-keys');
+const lunr = require('lunr');
+require('lunr-languages/lunr.stemmer.support.js')(lunr);
+require('lunr-languages/lunr.ru.js')(lunr); // or any other language you want
 
 Object.prototype.sortAsc = function() {
     return Object.assign({}, sortObject(this));
@@ -48,9 +51,26 @@ function rebuildIndexCb(err, files) {
     dataRead(jsonKeyed);
 }
 
-function dataRead(data) {
-    let a = 1;
-    fs.writeFileSync(indexedPath + '/../build.json', JSON.stringify(data, null, 4));
+function dataRead(documents) {
+    let lunrIndex = lunr(function () {
+        let self = this;
+        this.use(lunr.ru);
+        this.ref('id');
+        this.field('word');
+        this.field('definitions');
+
+        for (let p in documents) {
+            if (!documents.hasOwnProperty(p)) {
+                continue;
+            }
+
+            this.add(documents[p]);
+        }
+    });
+
+    let serializedIdx = JSON.stringify(lunrIndex);
+    fs.writeFileSync(indexedPath + '/../index.json', JSON.stringify(documents, null, 4));
+    fs.writeFileSync(indexedPath + '/../index.lunr.min.json', serializedIdx);
 }
 
 fs.readdir(indexedPath, rebuildIndexCb);
