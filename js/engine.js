@@ -139,6 +139,12 @@
         }
 
         $searchButton.on('click', doSearch);
+        $searchBox.on('keyup', (e) => {
+            if (e.keyCode === 13) {
+                doSearch();
+            }
+        });
+
         if (location.hash != null && location.hash.length > 1) {
             let querystring = location.hash.substr(1).replace(/([^\?])\?.+/igm, '$1');
             $searchBox.val(decodeURI(querystring));
