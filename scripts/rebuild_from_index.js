@@ -3,6 +3,7 @@
 const fs = require('fs');
 const sortObject = require('sort-object-keys');
 const slugify = require('transliteration').slugify;
+const pako = require('pako');
 const lunr = require('lunr');
 require('lunr-languages/lunr.stemmer.support.js')(lunr);
 require('lunr-languages/lunr.ru.js')(lunr); // or any other language you want
@@ -39,7 +40,9 @@ function rebuildIndexCb(err, files) {
         'ң',
         'җ',
         'i',
-        'ү'
+        'ү',
+        'һ',
+        'h'
     ];
 
     let tatLettersReplacements = [
@@ -48,7 +51,9 @@ function rebuildIndexCb(err, files) {
         'н',
         'ж',
         'и',
-        'у'
+        'у',
+        'х',
+        'х'
     ];
 
     for (let p in jsonContent) {
@@ -101,12 +106,12 @@ function dataRead(documents) {
                 this.add(documents[letter][p]);
             }
 
-            fs.writeFileSync(indexedPath + '/../index.min/' + letter + '.min.json', JSON.stringify(documents[letter]));
+            fs.writeFileSync(indexedPath + '/../index.gz/' + letter + '.min.json.gz', pako.deflate(JSON.stringify(documents[letter]), {to: 'string'}));
         }
     });
 
     let serializedIdx = JSON.stringify(lunrIndex);
-    fs.writeFileSync(indexedPath + '/../index.lunr.min.json', serializedIdx);
+    fs.writeFileSync(indexedPath + '/../index.lunr.min.json.gz', pako.deflate(serializedIdx, { to: 'string' }));
 }
 
 fs.readdir(indexedPath, rebuildIndexCb);
