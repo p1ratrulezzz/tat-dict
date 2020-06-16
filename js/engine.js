@@ -1,10 +1,27 @@
 (function(jsonHelper, $) {
-    window.addEventListener("load", function(event) {
-        jsonHelper.loadJSON('/data/index.lunr.min.json', function(response) {
-            let data = JSON.parse(response);
-            let lunrIndex = lunr.Index.load(data);
+    let indexLoadedPromise = new Promise((resolve, reject) => {
+        (function pakoTest() {
+            if (pako != undefined && pako.inflate != null && jsonHelper != undefined) {
+                return resolve();
+            }
 
-            window.lunrIndex = lunrIndex;
+            setTimeout(pakoTest, 30);
+        }) ();
+    }).then(() => {
+        return new Promise((resolve, reject) => {
+            jsonHelper.loadJSON('/data/index.lunr.min.json.gz', function(response) {
+                let data = JSON.parse(pako.inflate(response, { to: 'string' }));
+                let lunrIndex = lunr.Index.load(data);
+
+                window.lunrIndex = lunrIndex;
+                resolve(lunrIndex);
+            });
+        });
+    });
+
+    window.addEventListener("load", function(event) {
+        // The page is fully loaded.
+        indexLoadedPromise.then((lunrIndex) => {
             indexLoaded(lunrIndex);
         });
     });
@@ -73,9 +90,9 @@
                 searchPromise = searchPromise.then(() => {
                     if (wordsData[letter] == null) {
                         return new Promise((resolve, reject) => {
-                            let jsonFile = '/data/index.min/' + letter + '.min.json';
+                            let jsonFile = '/data/index.gz/' + letter + '.min.json.gz';
                             jsonHelper.loadJSON(jsonFile, (response) => {
-                                let _data = JSON.parse(response);
+                                let _data = JSON.parse(pako.inflate(response, {to: 'string'}));
                                 wordsData[letter] = _data;
                                 resultsFound.push(wordsData[letter][id]);
                                 resolve(resultsFound);
