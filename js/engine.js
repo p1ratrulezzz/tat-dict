@@ -49,17 +49,16 @@
                     wildcard |= lunr.Query.wildcard.TRAILING;
                 }
 
-                if (params.fields.length === 0) {
-                    q.term(querystring, {
-                        wildcard: wildcard
-                    });
+                let lunrOptions = {
+                    wildcard: wildcard
+                };
+                if (params.fields.length > 0) {
+                    lunrOptions.fields = params.fields;
                 }
-                else {
-                    q.term(querystring, {
-                        fields: params.fields,
-                        wildcard: wildcard
-                    });
-                }
+
+                querystring.toLocaleLowerCase().split(' ').forEach((word) => {
+                    q.term(word.trim(), lunrOptions);
+                });
             });
 
             let resultsFound = [];
