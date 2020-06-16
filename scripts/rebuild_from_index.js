@@ -42,7 +42,8 @@ function rebuildIndexCb(err, files) {
         'i',
         'ү',
         'һ',
-        'h'
+        'h',
+        'ё'
     ];
 
     let tatLettersReplacements = [
@@ -53,7 +54,8 @@ function rebuildIndexCb(err, files) {
         'и',
         'у',
         'х',
-        'х'
+        'х',
+        'е'
     ];
 
     for (let p in jsonContent) {
