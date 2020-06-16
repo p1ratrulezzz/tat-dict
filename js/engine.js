@@ -1,7 +1,7 @@
 (function(jsonHelper, $) {
     let indexLoadedPromise = new Promise((resolve, reject) => {
         (function pakoTest() {
-            if (pako != undefined && pako.inflate != null && jsonHelper != undefined) {
+            if (window.pako != null && pako.inflate != null && window.jsonHelper != null) {
                 return resolve();
             }
 
