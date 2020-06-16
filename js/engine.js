@@ -11,10 +11,7 @@
         return new Promise((resolve, reject) => {
             jsonHelper.loadJSON('/data/index.lunr.min.json.gz', function(response) {
                 let data = JSON.parse(pako.inflate(response, { to: 'string' }));
-                let lunrIndex = lunr.Index.load(data);
-
-                window.lunrIndex = lunrIndex;
-                resolve(lunrIndex);
+                resolve(data);
             });
         });
     });
@@ -23,7 +20,8 @@
         $ = window.jQuery;
 
         // The page is fully loaded.
-        indexLoadedPromise.then((lunrIndex) => {
+        indexLoadedPromise.then((data) => {
+            let lunrIndex = lunr.Index.load(data);
             indexLoaded(lunrIndex);
         });
     });
