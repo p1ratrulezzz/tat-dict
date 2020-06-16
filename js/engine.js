@@ -1,4 +1,4 @@
-(function(jsonHelper, $) {
+(function($) {
     let indexLoadedPromise = new Promise((resolve, reject) => {
         (function pakoTest() {
             if (window.pako != null && pako.inflate != null && window.jsonHelper != null) {
@@ -20,6 +20,8 @@
     });
 
     window.addEventListener("load", function(event) {
+        $ = window.jQuery;
+
         // The page is fully loaded.
         indexLoadedPromise.then((lunrIndex) => {
             indexLoaded(lunrIndex);
@@ -168,4 +170,4 @@
             doSearch();
         }
     }
-}) (jsonHelper, jQuery);
+}) ();
