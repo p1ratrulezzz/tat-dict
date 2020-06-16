@@ -1,21 +1,32 @@
 (function($) {
-    let indexLoadedPromise = new Promise(function(resolve, reject) {
-        (function pakoTest() {
-            if (window.pako != null && pako.inflate != null && window.jsonHelper != null) {
-                return resolve();
-            }
+    let indexLoadedPromise;
+    (function promiseTest() {
+        if (window.Promise != null) {
+            return initPromise();
+        }
+        
+        setTimeout(promiseTest, 30);
+    })();
+    
+    function initPromise() {
+        return indexLoadedPromise = new Promise(function(resolve, reject) {
+            (function pakoTest() {
+                if (window.pako != null && pako.inflate != null && window.jsonHelper != null) {
+                    return resolve();
+                }
 
-            setTimeout(pakoTest, 30);
-        }) ();
-    }).then(function() {
-        return new Promise(function(resolve, reject) {
-            jsonHelper.loadJSON('/data/index.lunr.min.json.gz', function(response) {
-                let data = JSON.parse(pako.inflate(response, { to: 'string' }));
-                resolve(data);
+                setTimeout(pakoTest, 30);
+            }) ();
+        }).then(function() {
+            return new Promise(function(resolve, reject) {
+                jsonHelper.loadJSON('/data/index.lunr.min.json.gz', function(response) {
+                    let data = JSON.parse(pako.inflate(response, { to: 'string' }));
+                    resolve(data);
+                });
             });
         });
-    });
-
+    }
+    
     window.addEventListener("load", function(event) {
         $ = window.jQuery;
 
@@ -49,13 +60,19 @@
         }
 
         let wordsData = {};
-        function searchAndGetWord(querystring, params) {
-            Object.assign({
+        function searchAndGetWord(querystring, paramsSearch) {
+            let params = {
                 wildcard_left: false,
                 wildcard_right: false,
                 fields: [],
-            }, params);
-
+            };
+            
+            for (let p in paramsSearch) {
+                if (paramsSearch.hasOwnProperty(p)) {
+                    params[p] = paramsSearch[p];
+                }
+            }
+           
             let results = lunrIndex.query(function(q) {
                 let wildcard = lunr.Query.wildcard.NONE;
                 if (params.wildcard_left) {
