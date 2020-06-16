@@ -33,6 +33,24 @@ function rebuildIndexCb(err, files) {
     let jsonKeyed = {};
     jsonContent = jsonContent.sortAsc();
     let ref = 1;
+    let tatLetters = [
+        'ә',
+        'ө',
+        'ң',
+        'җ',
+        'i',
+        'ү'
+    ];
+
+    let tatLettersReplacements = [
+        'э',
+        'о',
+        'н',
+        'ж',
+        'и',
+        'у'
+    ];
+
     for (let p in jsonContent) {
         if (!jsonContent.hasOwnProperty(p)) {
             continue;
@@ -41,9 +59,16 @@ function rebuildIndexCb(err, files) {
         let word = p;
         let definitions = jsonContent[word].join("\n");
         let firstLetter = slugify(word.substr(0, 1).toLocaleLowerCase()) || 'zzz_rest';
-        jsonKeyed[word] = {
+        let slug = word.toLocaleLowerCase();
+        tatLetters.forEach((_letter, _index) => {
+            slug = slug.replace(new RegExp(_letter, 'igm'), tatLettersReplacements[_index]);
+        });
+
+        jsonKeyed[firstLetter] = jsonKeyed[firstLetter] || {};
+        jsonKeyed[firstLetter][ref] = {
             'id': firstLetter + ':' + ref,
             'word': word,
+            'slug': slug,
             'definition': definitions,
         };
 
@@ -60,20 +85,27 @@ function dataRead(documents) {
 
         this.ref('id');
         this.field('word');
+        this.field('slug');
         this.field('definition');
         this.metadataWhitelist = ['position'];
 
-        for (let p in documents) {
-            if (!documents.hasOwnProperty(p)) {
+        for (let letter in documents) {
+            if (!documents.hasOwnProperty(letter)) {
                 continue;
             }
 
-            this.add(documents[p]);
+            for (let p in documents[letter]) {
+                if (!documents[letter].hasOwnProperty(p)) {
+                    continue;
+                }
+                this.add(documents[letter][p]);
+            }
+
+            fs.writeFileSync(indexedPath + '/../index.min/' + letter + '.min.json', JSON.stringify(documents[letter]));
         }
     });
 
     let serializedIdx = JSON.stringify(lunrIndex);
-    fs.writeFileSync(indexedPath + '/../index.json', JSON.stringify(documents, null, 4));
     fs.writeFileSync(indexedPath + '/../index.lunr.min.json', serializedIdx);
 }
 

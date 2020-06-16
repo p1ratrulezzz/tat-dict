@@ -6,12 +6,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
 
     <title>Татарский словарь</title>
-
-    <meta name="description" content="">
-    <meta name="keywords" content="">
+    <meta name="description" content="Русско-татарский словарь с базой около 13 тысяч слов! Татарские слова с подробными пояснениями значения.">
+    <meta name="keywords" content="Русско-татарский словарь, татарский перевод, словарь татарский">
     <meta name="robots" content="index, follow">
     <meta name="language" content="RU">
     <meta name="author" content="P1ratRuleZZZ">
@@ -28,19 +27,63 @@
         <div class="navbar-header">
             <a class="navbar-brand" href="#"><a href="/"><h1>Татарский словарь</h1></a></a>
         </div>
-    </div>
-    <div class="row row-cols-2">
-        <div class="col-sm" data-spy="scroll" data-offset="0" data-target="#glossary-navigation">
 
+    </div>
+    <div class="container-fluid">
+        <div class="col-sm mb-2">
+            <div class="search-actions-wrapper">
+                <input type="text" class="search-box" placeholder="Search" disabled="disabled" />
+                <button class="btn btn-primary search-button" disabled="disabled">
+                    <span class="spinner spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                    Search
+                </button>
+
+                <div class="dropdown settings-box">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Настройки поиска
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="" id="only-word-search">
+                            <label class="form-check-label" for="only-word-search">
+                                Искать только по татарским
+                            </label>
+                        </div>
+
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="" id="wildcard-search">
+                            <label class="form-check-label" for="wildcard-search">
+                                Расширить поиск
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm">
+            <div class="hidden-box templates-wrapper" style="display: none;">
+                <div class="card w-75 mb-1 search-result-wrapper">
+                    <div class="card-body">
+                        <h5 class="card-title"><strong class="word">Card title</strong></h5>
+                        <p class="card-text definition">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="spinner-border ext-success spinner-global" role="status">
+                <span class="sr-only">Loading...</span>
+            </div>
+            <div class="search-results">
+
+            </div>
         </div>
     </div>
 </div>
 
 <!-- Optional JavaScript -->
 <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
 <script src="/js/lunr/lunr.js"></script>
 <script src="/js/lunr/lunr.stemmer.support.js"></script>
 <script src="/js/lunr/lunr.ru.js"></script>
