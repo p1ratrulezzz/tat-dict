@@ -33,6 +33,7 @@
         // The page is fully loaded.
         indexLoadedPromise.then(function(data) {
             let lunrIndex = lunr.Index.load(data);
+            window.lunrIndex = lunrIndex;
             indexLoaded(lunrIndex);
         });
     });
@@ -111,13 +112,13 @@
                             jsonHelper.loadJSON(jsonFile, function(response) {
                                 let _data = JSON.parse(pako.inflate(response, {to: 'string'}));
                                 wordsData[letter] = _data;
-                                resultsFound.push(wordsData[letter][id]);
+                                resultsFound.push([wordsData[letter][id], result.matchData.metadata]);
                                 resolve(resultsFound);
                             });
                         });
                     }
                     else {
-                        resultsFound.push(wordsData[letter][id]);
+                        resultsFound.push([wordsData[letter][id], result.matchData.metadata]);
                         return resultsFound;
                     }
                 });
@@ -129,7 +130,7 @@
         window.searchAndGetWord = searchAndGetWord;
 
         function doSearch(e) {
-            let queryString = $('input.search-box').val();
+            let queryString = $('input.search-box').val().trim();
             let onlyWordsSearch = $('#only-word-search').prop('checked');
             let wildcardSearch = $('#wildcard-search').prop('checked');
 
@@ -158,8 +159,24 @@
                         $searchResultsWrapper.append($item);
                     }
                     else {
-                        resultsFound.forEach(function(result) {
+                        resultsFound.forEach(function(resultRaw) {
+                            let result = resultRaw[0];
                             let $item = $(templateHtml);
+
+                            for (let _matchText in resultRaw[1]) {
+                                let match = resultRaw[1][_matchText];
+                                for (let _matchProp in match) {
+                                    let positions = match[_matchProp].position;
+                                    positions.forEach(function (_pos) {
+                                        result[_matchProp] =
+                                            result[_matchProp].substr(0, _pos[0])
+                                            + '<span class="bg-warning text-white">'
+                                            + result[_matchProp].substr(_pos[0], _pos[1] - 1) + '</span>'
+                                            + result[_matchProp].substr(_pos[1] +_pos[0] - 1);
+                                    });
+                                }
+                            }
+
                             $item.find('.word').html(result.word);
                             $item.find('.definition').html(result.definition);
 
