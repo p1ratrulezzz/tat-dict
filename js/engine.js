@@ -160,7 +160,7 @@
                     }
                     else {
                         resultsFound.forEach(function(resultRaw) {
-                            let result = resultRaw[0];
+                            let result = JSON.parse(JSON.stringify(resultRaw[0]));
                             let $item = $(templateHtml);
 
                             for (let _matchText in resultRaw[1]) {
@@ -191,7 +191,7 @@
 
         $searchButton.on('click', doSearch);
         $searchBox.on('keyup', function(e) {
-            if (e.keyCode === 13) {
+            if (e.key === 'Enter') {
                 doSearch();
             }
         });
