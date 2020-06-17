@@ -167,6 +167,7 @@
                                 let match = resultRaw[1][_matchText];
                                 for (let _matchProp in match) {
                                     let positions = match[_matchProp].position;
+                                    _matchProp = _matchProp == 'slug' ? 'word' : _matchProp;
                                     positions.forEach(function (_pos) {
                                         result[_matchProp] =
                                             result[_matchProp].substr(0, _pos[0])
