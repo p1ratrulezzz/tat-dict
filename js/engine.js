@@ -168,10 +168,13 @@
                                 for (let _matchProp in match) {
                                     let positions = match[_matchProp].position;
                                     positions.forEach(function (_pos) {
+                                        let highlightedWord = result[_matchProp].substr(_pos[0], _pos[1] - 1);
+                                        let $span = $('<span></span>');
+                                        $span.addClass('bg-warning text-white');
+                                        $span.html(highlightedWord);
+
                                         result[_matchProp] =
-                                            result[_matchProp].substr(0, _pos[0])
-                                            + '<span class="bg-warning text-white">'
-                                            + result[_matchProp].substr(_pos[0], _pos[1] - 1) + '</span>'
+                                            result[_matchProp].substr(0, _pos[0]) + $span.get(0).outerHTML
                                             + result[_matchProp].substr(_pos[1] +_pos[0] - 1);
                                     });
                                 }
