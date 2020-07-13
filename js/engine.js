@@ -163,7 +163,7 @@
                             let result = JSON.parse(JSON.stringify(resultRaw[0]));
                             let $item = $(templateHtml);
 
-                            for (let _matchText in resultRaw[1]) {
+                            /*for (let _matchText in resultRaw[1]) {
                                 let match = resultRaw[1][_matchText];
                                 for (let _matchProp in match) {
                                     let positions = match[_matchProp].position;
@@ -179,7 +179,7 @@
                                             + result[_matchProp].substr(_pos[1] +_pos[0] - 1);
                                     });
                                 }
-                            }
+                            }*/
 
                             $item.find('.word').html(result.word);
                             $item.find('.definition').html(result.definition);
