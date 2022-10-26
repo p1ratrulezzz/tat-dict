@@ -1,0 +1,57 @@
+:root {
+  --brand-color: #209cee;
+  --text-color: #000;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  padding: 0;
+	margin: 0;
+  font-family: Roboto, oxygen, ubuntu, cantarell, fira sans, droid sans, helvetica neue, sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
+  color: var(--text-color);
+  background-color: #fff;
+}
+
+.container {
+  max-width: 1024px;
+  width: 100%;
+  margin: 0 auto;
+	padding-left: 15px;
+	padding-right: 15px;
+}
+
+.header {
+	padding: 15px 0;
+  background: var(--brand-color);
+  color: white;
+}
+
+.header .container {
+  display: flex;
+  align-items: center;
+	justify-content: space-between;
+}
+
+.logo-block {
+	display: flex;
+	align-items: center;
+}
+
+.logo {
+	display: block;
+	padding-right: 30px;
+}
+
+.logo img {
+	display: block;
+	width: 100px;
+}
+
+.wrapper {
+	padding-top: 15px;
+}
