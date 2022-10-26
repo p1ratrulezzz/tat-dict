@@ -1,5 +1,6 @@
 :root {
-  --brand-color: #209cee;
+  --brand-primary: #209cee;
+  --brand-gray: #acb1c6;
   --text-color: #000;
 }
 
@@ -9,7 +10,7 @@
 
 body {
   padding: 0;
-	margin: 0;
+  margin: 0;
   font-family: Roboto, oxygen, ubuntu, cantarell, fira sans, droid sans, helvetica neue, sans-serif;
   font-size: 16px;
   line-height: 1.5;
@@ -21,37 +22,105 @@ body {
   max-width: 1024px;
   width: 100%;
   margin: 0 auto;
-	padding-left: 15px;
-	padding-right: 15px;
+  padding-left: 15px;
+  padding-right: 15px;
 }
 
 .header {
-	padding: 15px 0;
-  background: var(--brand-color);
+  padding: 15px 0;
+  background: var(--brand-primary);
   color: white;
 }
 
 .header .container {
   display: flex;
   align-items: center;
-	justify-content: space-between;
+  justify-content: space-between;
 }
 
 .logo-block {
-	display: flex;
-	align-items: center;
+  display: flex;
+  align-items: center;
 }
 
 .logo {
-	display: block;
-	padding-right: 30px;
+  display: block;
+  padding-right: 30px;
 }
 
 .logo img {
-	display: block;
-	width: 100px;
+  display: block;
+  width: 100px;
 }
 
 .wrapper {
-	padding-top: 15px;
+  padding: 30px 0;
+}
+
+.search-line {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.search-line input {
+  width: 100%;
+  margin-right: -1px;
+}
+
+.btn {
+  background: var(--brand-primary);
+  color: white;
+  font-size: 18px;
+  border: 0;
+  transition: color 0.2s ease, background 0.2s ease;
+  height: 50px;
+  padding: 3px 15px;
+  cursor: pointer;
+}
+
+.btn:hover {
+  opacity: 0.8;
+}
+
+input {
+  background: #fff;
+  border: 1px solid var(--brand-gray);
+  height: 50px;
+  padding: 3px 15px;
+  font-size: 18px;
+  color: black;
+  outline-color: var(--brand-primary);
+}
+
+.form-check input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.form-check {
+  cursor: pointer;
+}
+
+.form-check .check-control {
+  width: 40px;
+  height: 20px;
+  position: relative;
+  box-shadow: inset 0 0 5px var(--brand-gray);
+}
+
+.form-check .check-control:before {
+  content: '';
+  width: 20px;
+  height: 20px;
+  display: block;
+  position: absolute;
+  border-radius: 50%;
+  left: 0;
+  background: var(--brand-primary)
+}
+
+.form-check input:checked + .check-control:before {
+  transform: translateX(20px);
 }
