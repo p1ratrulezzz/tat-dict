@@ -1,10 +1,16 @@
 {
-  "dependencies": {
-    "html-entities": "^1.3.1",
-    "lunr": "^2.3.8",
-    "lunr-languages": "^1.4.0",
-    "pako": "^1.0.11",
-    "sort-object-keys": "^1.1.3",
-    "transliteration": "^2.1.11"
-  }
+	"scripts": {
+		"start": "serve ."
+	},
+	"dependencies": {
+		"html-entities": "^1.3.1",
+		"lunr": "^2.3.8",
+		"lunr-languages": "^1.4.0",
+		"pako": "^1.0.11",
+		"sort-object-keys": "^1.1.3",
+		"transliteration": "^2.1.11"
+	},
+	"devDependencies": {
+		"serve": "^14.0.1"
+	}
 }
